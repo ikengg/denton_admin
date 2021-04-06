@@ -14,28 +14,40 @@ import BuildIcon from '@material-ui/icons/Build';
 export const mainListItems = [
   {
     icon: <DashboardIcon style={{ color: 'white' }} />,
-    text: 'Dashboard'
+    text: 'Dashboard',
+    route: '/dashboard',
+    isDisable: false
   },
   {
     icon: <ShoppingCartIcon style={{ color: 'white' }} />,
-    text: 'Orders'
+    text: 'Orders',
+    route: '/a',
+    isDisable: true
   },
   {
     icon: <PeopleIcon style={{ color: 'white' }} />,
-    text: 'Customers'
+    text: 'Customers',
+    route: '/b',
+    isDisable: true
   },
   {
     icon: <BarChartIcon style={{ color: 'white' }} />,
-    text: 'Reports'
+    text: 'Reports',
+    route: '/c',
+    isDisable: true
   },
   {
     icon: <LayersIcon style={{ color: 'white' }} />,
-    text: 'Integrations'
+    text: 'Integrations',
+    route: '/d',
+    isDisable: true
   },
   ///ส่งซ่อม
   {
     icon: <BuildIcon style={{ color: 'white' }} />,
-    text: 'ส่งสินค้าซ่อม'
+    text: 'ส่งสินค้าซ่อม',
+    route: '/repair',
+    isDisable: false
   },
 ];
 
@@ -52,5 +64,5 @@ export const secondaryListItems = [
   {
     icon: <AssignmentIcon style={{ color: 'white' }} />,
     text: 'Year-end sale'
-  },  
+  },
 ]

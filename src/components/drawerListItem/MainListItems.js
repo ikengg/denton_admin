@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { mainListItems } from './listItems';
-
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     listInDrawer: {
@@ -12,6 +12,10 @@ const useStyles = makeStyles((theme) => ({
             background: "#1c2636",
         },
     },
+    isActive: {
+        backgroundColor: "#1c2636",
+        color: "white",
+    }
 }));
 
 const MainListItems = () => {
@@ -24,14 +28,20 @@ const MainListItems = () => {
             {
                 mainListItems.map((list) => {
                     return (
-                        <>
-                            <ListItem button className={classes.listInDrawer}>
-                                <ListItemIcon>
-                                    {list.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={`${list.text}`} />
-                            </ListItem>
-                        </>
+                        <ListItem
+                            button
+                            className={classes.listInDrawer}
+                            activeClassName={classes.isActive}
+                            component={NavLink}
+                            to={`${list.route}`}
+                            key={`${list.route}`}
+                            disabled={list.isDisable}                       
+                        >
+                            <ListItemIcon>
+                                {list.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={`${list.text}`} />
+                        </ListItem>
                     )
                 })
             }
@@ -39,4 +49,4 @@ const MainListItems = () => {
     )
 }
 
-export default MainListItems
+export default MainListItems;
