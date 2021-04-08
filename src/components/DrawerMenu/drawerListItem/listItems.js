@@ -1,8 +1,4 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
@@ -55,14 +51,20 @@ export const mainListItems = [
 export const secondaryListItems = [
   {
     icon: <AssignmentIcon style={{ color: 'white' }} />,
-    text: 'Current month'
+    text: 'Current month',
+    route: '/dd',
+    isDisable: true,
   },
   {
     icon: <AssignmentIcon style={{ color: 'white' }} />,
-    text: 'Last quarter'
+    text: 'Last quarter',
+    route: '/ee',
+    isDisable: true,
   },
   {
     icon: <AssignmentIcon style={{ color: 'white' }} />,
-    text: 'Year-end sale'
+    text: 'Year-end sale',
+    route: '/ff',
+    isDisable: true,
   },
 ]

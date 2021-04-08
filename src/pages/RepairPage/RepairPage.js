@@ -4,11 +4,10 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Chart from '../components/Chart';
-import Deposits from '../components/Deposits';
-import Orders from '../components/Orders';
-import Footer from '../components/Footer';
+import Footer from '../../components/Footer';
 import { makeStyles } from '@material-ui/core/styles';
+//import FormStepper from './FormStepper';
+import Register from './StepperForm/index';
 
 const drawerWidth = 240;
 
@@ -60,13 +59,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    //backgroundColor: 'rgb(35, 48, 68)',
     backgroundColor: '#233044',
-
     color: 'white',
-    // '&:hover': {
-    //   background: "#f00",
-    // },
   },
   listInDrawer: {
     '&:hover': {
@@ -93,15 +87,17 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    
   },
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    flexGrow: 1,
   },
   fixedHeight: {
-    height: 240,
+    height: '100vh',
   },
 }));
 
@@ -112,16 +108,24 @@ export default function RepairPage() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div>
+    <>
       {/* Home Content */}
-      <main className={classes.content}>
+      <main className={classes.content} justify="center">
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
+        <Container 
+          maxWidth="lg"           
+          className={classes.container}          
+        >
+          <Grid 
+            container 
+            spacing={3}             
+          >
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <h1>ส่งสินค้าซ่อม</h1>
+            <Grid item xs={12} md={12} lg={12} >
+              <Paper 
+                className={fixedHeightPaper} 
+              > 
+                <Register />
               </Paper>
             </Grid>
           </Grid>
@@ -130,7 +134,7 @@ export default function RepairPage() {
           </Box>
         </Container>
       </main>
-    </div>
+    </>
   );
 
 }

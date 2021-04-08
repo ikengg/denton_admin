@@ -60,13 +60,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    //backgroundColor: 'rgb(35, 48, 68)',
     backgroundColor: '#233044',
-
     color: 'white',
-    // '&:hover': {
-    //   background: "#f00",
-    // },
   },
   listInDrawer: {
     '&:hover': {

@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -47,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
 
     const classes = useStyles();
-    var { open, handleDrawerOpen } = props;
+    let { open, handleDrawerOpen } = props;
+    
     return (
         <>
             {/* Header */}
@@ -66,8 +67,12 @@ const Header = (props) => {
                         POSPOS
                     </Typography>
                     <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
+                        <Badge color="secondary">
+                            <ExitToAppIcon 
+                                onClick={()=>{
+                                    console.log('LOG OUT');
+                                }}
+                            />
                         </Badge>
                     </IconButton>
                 </Toolbar>

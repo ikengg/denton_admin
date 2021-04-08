@@ -5,7 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { secondaryListItems } from './listItems';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     listInDrawer: {
@@ -29,16 +29,23 @@ const SecondListItems = () => {
             </ListSubheader>
             {/* second list item */}
             {
-                secondaryListItems.map((list) => {
+                secondaryListItems.map((list, index) => {
                     return (
                         <>
-                            <ListItem button className={classes.listInDrawer}>
-                                <ListItemIcon>
+                            <ListItem
+                                button
+                                key={list.route}
+                                className={classes.listInDrawer}
+                                activeClassName={classes.isActive}
+                                component={NavLink}
+                                to={`${list.route}`}                                
+                                disabled={list.isDisable}
+                            >
+                                <ListItemIcon >
                                     {list.icon}
                                 </ListItemIcon>
                                 <ListItemText primary={`${list.text}`} />
                             </ListItem>
-
                         </>
                     )
                 })

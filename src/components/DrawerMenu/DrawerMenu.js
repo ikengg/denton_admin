@@ -65,8 +65,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DrawerMenu = (props) => {
+
     const classes = useStyles();
-    var {open, handleDrawerClose} = props;
+
+    let {open, handleDrawerClose} = props;
     return (
         <>
             {/* Left Drawer */}

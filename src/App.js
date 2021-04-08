@@ -3,10 +3,12 @@ import React from 'react';
 import DashboardPage from './pages/DashboardPage';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useStyles from './styles';
-import DrawerMenu from './components/DrawerMenu';
+import DrawerMenu from './components/DrawerMenu/DrawerMenu';
 import Header from './components/Header';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import RepairPage from './pages/RepairPage';
+import RepairPage from './pages/RepairPage/RepairPage';
+import LoginPage from './pages/LoginPage';
+
 
 function App() {
 
@@ -36,6 +38,11 @@ function App() {
         />
         <Switch>
           {/* Main Route */}
+          <Route exact path="/">
+            <LoginPage />
+            {/* <LoginOriginal /> */}
+          </Route>
+          {/* Dashboard Route */}
           <Route exact path="/dashboard">
             <DashboardPage />
           </Route>
