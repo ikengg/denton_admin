@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -12,8 +12,20 @@ import * as yup from "yup";
 
 //redux importment
 import { useSelector, useDispatch } from "react-redux";
-import { setInformation, setAccount } from "../../../redux/actions/formStepperAction";
-import QRCode from './QRCode';
+import {
+    setInformation,
+    setAccount,
+    setIsCheckingSerial,
+    setInsertNewItem,
+    setIsCheckingEmail,
+    setInsertNewCustomerEmail,
+    setIsCheckingPhone,
+    setInsertNewCustomerPhone,
+} from "../../../redux/actions/formStepperAction";
+
+import RepairQRCode from './RepairQRCode';
+
+import { PosposAxios } from '../../../utils/axiosConfig';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const informationSchema = yup.object().shape({
-    serial: yup
+    serialNumber: yup
         .string()
         .required('This field is required.'),
     name: yup
@@ -47,6 +59,9 @@ const informationSchema = yup.object().shape({
     emi2: yup
         .string()
         .required('This field is required.'),
+    problem: yup
+        .string()
+        .required('This field is required.'),
 });
 
 const accountSchema = yup.object().shape({
@@ -54,7 +69,11 @@ const accountSchema = yup.object().shape({
         .string()
         .email('Invalid email.')
         .required('This field is required.'),
-    name: yup
+    firstName: yup
+        .string()
+        .required('This field is required.')
+        .min(3, 'Please Enter less then 3 letters'),
+    lastName: yup
         .string()
         .required('This field is required.')
         .min(3, 'Please Enter less then 3 letters'),
@@ -70,13 +89,25 @@ const accountSchema = yup.object().shape({
 
 //Step Title
 function getSteps() {
-    return ['Device Information', 'User Information', 'QR Code'];
+    return [
+        'Device Information',
+        'User Information',
+        'QR Code'
+    ];
 }
 
 export default function StepperForm() {
     const classes = useStyles();
 
-    const { information, account } = useSelector((state) => state.formStepperReducer);
+    const {
+        information,
+        account,
+        isCheckingSerial,
+        insertNewItem,
+        insertNewCustomerEmail,
+        insertNewCustomerPhone
+    } = useSelector((state) => state.formStepperReducer);
+
     const dispatch = useDispatch();
 
     const informationForm = useForm({
@@ -87,7 +118,7 @@ export default function StepperForm() {
         validationSchema: accountSchema
     });
 
-    const {handleSubmit} = useForm();
+    const { handleSubmit } = useForm();
 
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
@@ -110,11 +141,62 @@ export default function StepperForm() {
         setActiveStep(0);
     };
 
+    const addDataFormToDatabase = async (data) => {
+
+        let responseCustomer = undefined;
+        let responseItem = undefined;
+        // post customer to add on db
+        // if (insertNewCustomerEmail) {
+        if (insertNewCustomerPhone) {
+            //let { firstName, lastName, email, phone, address } = account;
+            //console.log(account);
+            console.log(data)
+            try {
+                responseCustomer = await PosposAxios.post('/api/customer/', {
+                    ...data,
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        console.log(responseCustomer);
+        let customerId = responseCustomer?.data.data.customerId || account.customerId;
+        console.log(customerId);
+
+        // post item to add on db
+        if (insertNewItem) {
+            try {
+                responseItem = await PosposAxios.post('/api/itemoutside/', {
+                    ...information,
+                    customerId
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        let serialNumber = responseItem?.serialNumber || information.serialNumber;
+        console.log(serialNumber);
+        let { equipment, problem, note } = information;
+
+        //add new repair
+        try {
+            let responseRepair = await PosposAxios.post('/api/repair/', {
+                customerId,
+                serialNumber,
+                equipment,
+                problem,
+                note
+            })
+            console.log(responseRepair);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     // onsubmit
-    const onSubmit = data => {
-
-        console.log(data);
-
+    const onSubmit = async (data) => {
+        //console.log(data);
         if (activeStep === 0) {
             // เก็บ data จาก form แรก
             dispatch(setInformation(data));
@@ -122,6 +204,8 @@ export default function StepperForm() {
         else if (activeStep === 1) {
             // เก็บ data จาก form หลัง
             dispatch(setAccount(data));
+            console.log(account);
+            await addDataFormToDatabase(data);
         }
         // go next step
         handleNext()
@@ -129,8 +213,31 @@ export default function StepperForm() {
 
     const finishSubmit = () => {
         console.log('finish');
+        //call Axios here
+        dispatch(setAccount());
+        dispatch(setInformation());
+        dispatch(setIsCheckingSerial());
+        dispatch(setInsertNewItem());
+        dispatch(setIsCheckingEmail());
+        dispatch(setInsertNewCustomerEmail());
+        dispatch(setIsCheckingPhone());
+        dispatch(setInsertNewCustomerPhone());
         handleNext();
     }
+
+    useEffect(() => {
+        return () => {
+            dispatch(setAccount());
+            dispatch(setInformation());
+            dispatch(setIsCheckingSerial());
+            dispatch(setInsertNewItem());
+            dispatch(setIsCheckingEmail());
+            dispatch(setInsertNewCustomerEmail());
+            dispatch(setIsCheckingPhone());
+            dispatch(setInsertNewCustomerPhone());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     // get step content
     function getStepContent(stepIndex) {
@@ -140,16 +247,16 @@ export default function StepperForm() {
             case 1:
                 return <Account formProps={accountForm} data={account} />;
             case 2:
-                return <QRCode />
+                return <RepairQRCode />
             default:
                 return 'Unknown stepIndex';
         }
     }
 
     return (
-        <form 
+        <form
             // onSubmit={activeStep === 0 ? informationForm.handleSubmit(onSubmit) : accountForm.handleSubmit(onSubmit)}>
-            onSubmit={(activeStep < steps.length - 1) ? (activeStep === 0 ? informationForm.handleSubmit(onSubmit) : accountForm.handleSubmit(onSubmit)) : handleSubmit(finishSubmit) }>
+            onSubmit={(activeStep < steps.length - 1) ? (activeStep === 0 ? informationForm.handleSubmit(onSubmit) : accountForm.handleSubmit(onSubmit)) : handleSubmit(finishSubmit)}>
 
             {/* Stepper */}
             <Stepper activeStep={activeStep} alternativeLabel>
@@ -164,7 +271,7 @@ export default function StepperForm() {
                 {activeStep === steps.length ? (
                     <div className={classes.buttonLayout} >
                         <Typography className={classes.instructions}>All steps completed</Typography>
-                        <Button variant="contained" color="primary" onClick={handleReset }  >Reset</Button>
+                        <Button variant="contained" color="primary" onClick={handleReset} >Reset</Button>
                     </div>
                 ) : (
                     <div>
@@ -182,7 +289,7 @@ export default function StepperForm() {
                             >
                                 Back
                             </Button>
-                            <Button variant="contained" color="primary" type="submit" >
+                            <Button variant="contained" color="primary" type="submit" disabled={isCheckingSerial}>
                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                             </Button>
                         </div>

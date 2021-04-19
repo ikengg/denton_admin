@@ -34,6 +34,7 @@ const MainListItems = () => {
                             activeClassName={classes.isActive}
                             component={NavLink}
                             to={`${list.route}`}
+                            exact
                             key={`${list.route}`}
                             disabled={list.isDisable}                       
                         >

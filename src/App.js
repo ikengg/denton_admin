@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import DashboardPage from './pages/DashboardPage';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useStyles from './styles';
@@ -8,11 +8,18 @@ import Header from './components/Header';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import RepairPage from './pages/RepairPage/RepairPage';
 import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
+import PrivateRoute from './guard/auth';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { updateProfile } from './redux/actions/authAction'
+import AdminRepair from './pages/AdminRepair/AdminRepair';
 
 function App() {
 
   const classes = useStyles();
+  const profile = useSelector(state => state.authReducer.profile)
+  const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -22,34 +29,51 @@ function App() {
     setOpen(false);
   };
 
+  // //on reflesh page
+  useEffect(() => {
+    let profile = JSON.parse(localStorage.getItem("profile"));
+    dispatch(updateProfile(profile));
+    // eslint-disable-next-line
+  }, [])
+
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {/* Header */}
-      <Header
-        open={open}
-        handleDrawerOpen={handleDrawerOpen}
-      />
       <Router>
+        {/* Header */}
+        {
+          profile && <Header
+            open={open}
+            handleDrawerOpen={handleDrawerOpen}
+          />
+        }
         {/* Left Drawer */}
-        <DrawerMenu
-          open={open}
-          handleDrawerClose={handleDrawerClose}
-        />
+        {
+          profile && <DrawerMenu
+            open={open}
+            handleDrawerClose={handleDrawerClose}
+          />
+        }
         <Switch>
-          {/* Main Route */}
-          <Route exact path="/">
+          {/* LoginPage */}
+          <Route exact path="/login">
             <LoginPage />
-            {/* <LoginOriginal /> */}
           </Route>
-          {/* Dashboard Route */}
-          <Route exact path="/dashboard">
+          
+          {/* Home */}
+          <PrivateRoute exact path="/">
             <DashboardPage />
-          </Route>
-          {/* Repair Page */}
-          <Route exact path="/repair">
+          </PrivateRoute>
+          {/* Repair */}
+          <PrivateRoute exact path="/repair">
             <RepairPage />
-          </Route>
+          </PrivateRoute>
+          <PrivateRoute exact path="/adminrepair">
+            <AdminRepair />
+          </PrivateRoute>
+          <PrivateRoute >
+            <NotFoundPage />
+          </PrivateRoute>
         </Switch>
       </Router>
     </div>

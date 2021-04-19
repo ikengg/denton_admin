@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,9 +13,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from '../components/Footer';
+import { PosposAxios } from '../utils/axiosConfig';
+import { updateProfile } from '../redux/actions/authAction'
+import { useDispatch } from 'react-redux' //ไว้เรียก action
+import { useHistory } from 'react-router-dom'
 
-import useForm  from "react-hook-form";
-//import { yupResolver } from "@hookform/resolvers/yup";
+import useForm from "react-hook-form";
 import * as yup from "yup";
 
 const loginSchema = yup.object().shape({
@@ -68,15 +71,44 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginPage() {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory()
+  const [isLoginFail, setIsLoginFail] = useState(false);
 
   const { register, errors, handleSubmit } = useForm({
     validationSchema: loginSchema
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-  }
+    try {
+      //get JWT token
+      const response = await PosposAxios.post('/api/user/', {
+        email: data.email,
+        password: data.password
+      });
 
+      //เก็บ JWT ไว้ใน local storage
+      localStorage.setItem('token', JSON.stringify(response.data))
+
+      //update profile 
+      const profileValue = await PosposAxios.get('/api/user/me', {
+        headers: {
+          Authorization: 'Bearer ' + response.data.access_token
+        }
+      });
+      // update profile on redux
+      dispatch(updateProfile(profileValue.data.data.firstName));
+      // save profile to local storage
+      localStorage.setItem('profile', JSON.stringify(profileValue.data.data.firstName));
+
+      history.replace('/');
+
+    } catch (e) {
+      setIsLoginFail(true);
+      //console.log(e.response.data.message)
+      console.log(e);
+    }
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -90,7 +122,9 @@ export default function LoginPage() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
           <form className={classes.form} onSubmit={handleSubmit(onSubmit)} >
+            {isLoginFail && <p style={{ color: 'red' }}>email หรือ password ไม่ถูกต้อง</p>}
             {/* Email */}
             <TextField
               variant="outlined"
@@ -116,7 +150,7 @@ export default function LoginPage() {
               id="password"
               inputRef={register}
               error={!!errors.password}
-              //autoComplete="current-password"
+            //autoComplete="current-password"
             />
             {errors.password && <p className={classes.errorMessage}>{errors.password.message}</p>}
             <FormControlLabel

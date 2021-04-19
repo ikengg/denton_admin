@@ -1,4 +1,5 @@
 import React from 'react';
+
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
@@ -6,12 +7,13 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BuildIcon from '@material-ui/icons/Build';
+import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 
 export const mainListItems = [
   {
     icon: <DashboardIcon style={{ color: 'white' }} />,
     text: 'Dashboard',
-    route: '/dashboard',
+    route: '/',
     isDisable: false
   },
   {
@@ -43,6 +45,12 @@ export const mainListItems = [
     icon: <BuildIcon style={{ color: 'white' }} />,
     text: 'ส่งสินค้าซ่อม',
     route: '/repair',
+    isDisable: false
+  },
+  {
+    icon: <FormatAlignLeftIcon style={{ color: 'white' }} />,
+    text: 'อัพเดทสถานะ',
+    route: '/adminrepair',
     isDisable: false
   },
 ];

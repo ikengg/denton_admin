@@ -1,13 +1,14 @@
 import React from 'react';
+import {
+  Box,
+  Grid,
+  Paper,
+  Container,
+  Typography,
+  makeStyles
+} from '@material-ui/core';
+import Footer from '../components/Footer';
 import clsx from 'clsx';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Footer from '../../components/Footer';
-import { makeStyles } from '@material-ui/core/styles';
-//import FormStepper from './FormStepper';
-import Register from './StepperForm/index';
 
 const drawerWidth = 240;
 
@@ -87,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    
+
   },
   paper: {
     padding: theme.spacing(2),
@@ -97,44 +98,57 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   fixedHeight: {
-    height: '130vh',
+    height: '50vh',
   },
 }));
 
-export default function RepairPage() {
-  
-  const classes = useStyles();
+const NotFoundView = () => {
 
+  const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <>
-      {/* Home Content */}
-      <main className={classes.content} justify="center">
-        <div className={classes.appBarSpacer} />
-        <Container 
-          maxWidth="lg"           
-          className={classes.container}          
+    <main className={classes.content} justify="center">
+      <div className={classes.appBarSpacer} />
+      <Container
+        maxWidth="lg"
+        className={classes.container}
+      >
+        <Grid
+          container
+          spacing={3}
         >
-          <Grid 
-            container 
-            spacing={3}             
-          >
-            {/* Chart */}
-            <Grid item xs={12} md={12} lg={12} >
-              <Paper 
-                className={fixedHeightPaper} 
-              > 
-                <Register />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Footer />
-          </Box>
-        </Container>
-      </main>
-    </>
-  );
+          {/* Chart */}
+          <Grid item xs={12} md={12} lg={12} >
+            <Paper
+              className={fixedHeightPaper}
+            >
+              <Typography
+                align="center"
+                color="textPrimary"
+                variant="h2"
+              >
+                404: The page you are looking for isn’t here
+              </Typography>
+              <Typography
+                align="center"
+                color="textPrimary"
+                variant="subtitle2"
+              >
+                You either tried some shady route or you came here by mistake.
+                Whichever it is, try using the navigation
+              </Typography>
 
-}
+
+            </Paper>
+          </Grid>
+        </Grid>
+        <Box pt={4}>
+          <Footer />
+        </Box>
+      </Container>
+    </main>
+  );
+};
+
+export default NotFoundView;

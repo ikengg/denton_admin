@@ -23,6 +23,7 @@ const SecondListItems = () => {
         <>
             <ListSubheader
                 inset
+                key="secList"
                 style={{ color: 'white' }}
             >
                 Saved reports
@@ -31,7 +32,6 @@ const SecondListItems = () => {
             {
                 secondaryListItems.map((list, index) => {
                     return (
-                        <>
                             <ListItem
                                 button
                                 key={list.route}
@@ -46,7 +46,6 @@ const SecondListItems = () => {
                                 </ListItemIcon>
                                 <ListItemText primary={`${list.text}`} />
                             </ListItem>
-                        </>
                     )
                 })
             }

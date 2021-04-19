@@ -7,6 +7,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
+import { updateProfile } from '../redux/actions/authAction'
+import { useSelector, useDispatch } from 'react-redux' //ไว้เรียก action
+import { useHistory } from 'react-router-dom'
 import clsx from 'clsx';
 
 const drawerWidth = 240;
@@ -46,8 +49,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
 
-    const classes = useStyles();
+    const classes = useStyles();    
     let { open, handleDrawerOpen } = props;
+    const userProfile = useSelector((state) => state.authReducer.profile);
+    //console.log(userProfile);
+    const dispatch = useDispatch();
+    const history = useHistory()
     
     return (
         <>
@@ -66,11 +73,19 @@ const Header = (props) => {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         POSPOS
                     </Typography>
+                    {userProfile && (
+                        <Typography component="p" color="inherit" noWrap>
+                            สวัสดีคุณ {userProfile}
+                        </Typography>
+                    )}
                     <IconButton color="inherit">
                         <Badge color="secondary">
                             <ExitToAppIcon 
                                 onClick={()=>{
-                                    console.log('LOG OUT');
+                                    dispatch(updateProfile(null));
+                                    localStorage.removeItem('token');
+                                    localStorage.removeItem('profile');
+                                    history.replace('/login');
                                 }}
                             />
                         </Badge>
