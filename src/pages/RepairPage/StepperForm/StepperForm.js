@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -97,6 +97,7 @@ function getSteps() {
 }
 
 export default function StepperForm() {
+    const [status,setStatus] = useState('กำลังส่งซ่อม')
     const classes = useStyles();
 
     const {
@@ -186,7 +187,8 @@ export default function StepperForm() {
                 serialNumber,
                 equipment,
                 problem,
-                note
+                note,
+                status: status
             })
             console.log(responseRepair);
         } catch (error) {
