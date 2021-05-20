@@ -1,10 +1,12 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import Grid from '@material-ui/core/Grid'
+import React, { Fragment, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import { useSelector, useDispatch } from "react-redux";
-import Button from '@material-ui/core/Button';
-import { PosposAxios } from '../../../utils/axiosConfig';
+import {
+    Button,
+    CircularProgress,
+    TextField,
+    Grid
+} from '@material-ui/core';
 import {
     setInsertNewCustomerEmail,
     setIsCheckingEmail,
@@ -12,6 +14,7 @@ import {
     setIsCheckingPhone,
     setInsertNewCustomerPhone,
 } from "../../../redux/actions/formStepperAction";
+import { PosposAxios } from '../../../utils/axiosConfig';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -46,7 +49,8 @@ export default function Account({ formProps: { register, errors }, data }) {
     const [emaillValue, setEmaillValue] = useState('');
     const [phoneValue, setPhoneValue] = useState('');
     const { isCheckingEmail, isCheckingPhone } = useSelector((state) => state.formStepperReducer);
-    const [enableEditting, setEnableEditting] = useState(true)
+    const [enableEditting, setEnableEditting] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
 
     const emailFieldOnChange = ({ target }) => {
@@ -79,6 +83,7 @@ export default function Account({ formProps: { register, errors }, data }) {
     }
 
     const checkPhoneWithDB = async () => {
+        setIsLoading(true);
         //axios check serial
         console.log(phoneValue);
         try {
@@ -94,9 +99,17 @@ export default function Account({ formProps: { register, errors }, data }) {
                 setEnableEditting(false);
             }
             // //NEXT STEP 
-            dispatch(setIsCheckingPhone(false));
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 200);
+            setTimeout(() => {
+                dispatch(setIsCheckingPhone(false));
+            }, 100);
         } catch (error) {
             console.log(error.data);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 200);
         }
     }
 
@@ -142,6 +155,14 @@ export default function Account({ formProps: { register, errors }, data }) {
                                 <Button variant="contained" color="primary" onClick={checkPhoneWithDB}>
                                     Check Customer Phone
                                 </Button>
+                            )
+                        }{
+                            isLoading && (
+                                <>
+                                    <br />
+                                    <br />
+                                    <CircularProgress  />
+                                </>
                             )
                         }
 
@@ -218,7 +239,6 @@ export default function Account({ formProps: { register, errors }, data }) {
                                         defaultValue={address}
                                     />
                                     {errors.address && <p className={classes.errorMessage}>{errors.address.message}</p>}
-
                                 </Grid>
                             </>
                         )

@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from '../components/Footer';
 import { PosposAxios } from '../utils/axiosConfig';
 import { updateProfile } from '../redux/actions/authAction'
 import { useDispatch } from 'react-redux' //ไว้เรียก action
 import { useHistory } from 'react-router-dom'
-
 import useForm from "react-hook-form";
 import * as yup from "yup";
+import { 
+  CircularProgress, 
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+ } from '@material-ui/core';
+
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -74,39 +77,48 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const history = useHistory()
   const [isLoginFail, setIsLoginFail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, errors, handleSubmit } = useForm({
     validationSchema: loginSchema
   });
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       //get JWT token
       const response = await PosposAxios.post('/api/user/', {
         email: data.email,
         password: data.password
       });
+      if (response.status === 200) {
+        ///เก็บ JWT ไว้ใน local storage
+        localStorage.setItem('token', JSON.stringify(response.data));
+        ///update profile 
+        const profileValue = await PosposAxios.get('/api/user/me', {
+          headers: {
+            Authorization: 'Bearer ' + response.data.access_token
+          }
+        });
+        ///update profile on redux
+        dispatch(updateProfile(profileValue.data.data.firstName));
+        ///save profile to local storage
+        localStorage.setItem('profile', JSON.stringify(profileValue.data.data.firstName));       
 
-      //เก็บ JWT ไว้ใน local storage
-      localStorage.setItem('token', JSON.stringify(response.data))
-
-      //update profile 
-      const profileValue = await PosposAxios.get('/api/user/me', {
-        headers: {
-          Authorization: 'Bearer ' + response.data.access_token
-        }
-      });
-      // update profile on redux
-      dispatch(updateProfile(profileValue.data.data.firstName));
-      // save profile to local storage
-      localStorage.setItem('profile', JSON.stringify(profileValue.data.data.firstName));
-
-      history.replace('/');
+        ///back to home
+        history.replace('/');
+      }else{
+        setIsLoginFail(true);
+      }
 
     } catch (e) {
       setIsLoginFail(true);
       //console.log(e.response.data.message)
       console.log(e);
+    }finally{
+      setTimeout(()=>{
+        setIsLoading(false);
+      }, 900);      
     }
   }
 
@@ -157,15 +169,29 @@ export default function LoginPage() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign In
-            </Button>
+            {
+              isLoading
+              ?(
+                <Box
+                  display="flex"
+                  justifyContent="center" 
+                  marginBottom={3}               
+                >
+                  <CircularProgress /> 
+                </Box>               
+              )
+              :(
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Sign In
+                </Button>
+              )
+            }
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

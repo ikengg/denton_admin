@@ -58,10 +58,6 @@ const useStyles = makeStyles((theme) => ({
       overflow: 'auto',
       flexDirection: 'column',
     },
-    // isActive: {
-    //   backgroundColor: "#e0f5fd",
-    //   color: "#0080ff"
-    // }
 }));
 
 const DrawerMenu = (props) => {

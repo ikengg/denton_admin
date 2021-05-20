@@ -5,9 +5,10 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+//import AssignmentIcon from '@material-ui/icons/Assignment';
 import BuildIcon from '@material-ui/icons/Build';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 export const mainListItems = [
   {
@@ -41,9 +42,31 @@ export const mainListItems = [
     isDisable: true
   },
   ///ส่งซ่อม
+  // {
+  //   icon: <BuildIcon style={{ color: 'white' }} />,
+  //   text: 'ส่งสินค้าซ่อม',
+  //   route: '/repair',
+  //   isDisable: false
+  // },
+  // {
+  //   icon: <FormatAlignLeftIcon style={{ color: 'white' }} />,
+  //   text: 'อัพเดทสถานะ',
+  //   route: '/adminrepair',
+  //   isDisable: false
+  // },
+  // {
+  //   icon: <EventAvailableIcon style={{ color: 'white' }} />,
+  //   text: 'ติดตามสถานะ',
+  //   route: '/status',
+  //   isDisable: false
+  // },
+];
+
+
+export const secondaryListItems = [
   {
     icon: <BuildIcon style={{ color: 'white' }} />,
-    text: 'ส่งสินค้าซ่อม',
+    text: 'ลงทะเบียนสินค้าซ่อม',
     route: '/repair',
     isDisable: false
   },
@@ -53,26 +76,10 @@ export const mainListItems = [
     route: '/adminrepair',
     isDisable: false
   },
-];
-
-
-export const secondaryListItems = [
   {
-    icon: <AssignmentIcon style={{ color: 'white' }} />,
-    text: 'Current month',
-    route: '/dd',
-    isDisable: true,
-  },
-  {
-    icon: <AssignmentIcon style={{ color: 'white' }} />,
-    text: 'Last quarter',
-    route: '/ee',
-    isDisable: true,
-  },
-  {
-    icon: <AssignmentIcon style={{ color: 'white' }} />,
-    text: 'Year-end sale',
-    route: '/ff',
-    isDisable: true,
+    icon: <EventAvailableIcon style={{ color: 'white' }} />,
+    text: 'ติดตามสถานะ',
+    route: '/status',
+    isDisable: false
   },
 ]

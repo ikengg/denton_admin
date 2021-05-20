@@ -71,7 +71,7 @@ const Header = (props) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        POSPOS
+                        POSPOS <small>Beta v0.1</small>
                     </Typography>
                     {userProfile && (
                         <Typography component="p" color="inherit" noWrap>

@@ -1,9 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import Grid from '@material-ui/core/Grid'
+//import Grid from '@material-ui/core/Grid'
+
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField';
-//redux importment
+import {
+    Grid,
+    Button,
+    TextField,
+    CircularProgress,
+ } from '@material-ui/core';
+
 import { useSelector, useDispatch } from "react-redux";
 import { PosposAxios } from '../../../utils/axiosConfig';
 import { setInformation, setIsCheckingSerial, setInsertNewItem  } from "../../../redux/actions/formStepperAction";
@@ -44,6 +49,7 @@ export default function Information({ formProps: { register, errors }, data }) {
     const [serialValue, setSerialValue] = useState('');
     const [enableEditting, setEnableEditting] = useState(true)
     const [responseCheckserial, setResponseCheckserial] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
 
     const serialFieldOnChange = ({ target }) => {
@@ -51,6 +57,7 @@ export default function Information({ formProps: { register, errors }, data }) {
     }
 
     const checkSerialWithDB = async () => {
+        setIsLoading(true);
         //axios check serial
         try{
             const response = await PosposAxios.post('/api/repair/checkserial/', {
@@ -66,12 +73,25 @@ export default function Information({ formProps: { register, errors }, data }) {
                 setEnableEditting(false);
             }
             //NEXT STEP 
-            dispatch(setIsCheckingSerial(false));
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 900);
+            setTimeout(() => {
+                dispatch(setIsCheckingSerial(false));
+            }, 100);
+            
+
         }catch(error){
             console.log(error);
             if(error.status === '409')
                 setResponseCheckserial(error.data)
+        }finally{
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 900)
+            
         }
+
     }
 
     useEffect(() => {
@@ -112,6 +132,14 @@ export default function Information({ formProps: { register, errors }, data }) {
                                 <Button variant="contained" color="primary" onClick={checkSerialWithDB}>
                                     Check Serial
                                 </Button>
+                            )
+                        }{
+                            isLoading && (
+                                <>
+                                    <br />
+                                    <br />
+                                    <CircularProgress  />
+                                </>
                             )
                         }
                     </Grid>

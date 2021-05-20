@@ -5,15 +5,20 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import useStyles from './styles';
 import DrawerMenu from './components/DrawerMenu/DrawerMenu';
 import Header from './components/Header';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, 
+  Switch, 
+  Route, 
+} from "react-router-dom";
 import RepairPage from './pages/RepairPage/RepairPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './guard/auth';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from './redux/actions/authAction'
 import AdminRepair from './pages/AdminRepair/AdminRepair';
+import RepairStatusTracking from './pages/RepairStatusTracking/RepairStatusTracking';
+import RepairQRCode from './pages/RepairPage/StepperForm/RepairQRCode';
+
 
 function App() {
 
@@ -59,7 +64,10 @@ function App() {
           <Route exact path="/login">
             <LoginPage />
           </Route>
-          
+          {/* Status tracking public page */}
+          <Route exact path="/status">
+            <RepairStatusTracking />
+          </Route>          
           {/* Home */}
           <PrivateRoute exact path="/">
             <DashboardPage />
@@ -71,9 +79,13 @@ function App() {
           <PrivateRoute exact path="/adminrepair">
             <AdminRepair />
           </PrivateRoute>
+          <PrivateRoute exact path="/print">
+            <RepairQRCode />
+          </PrivateRoute>
           <PrivateRoute >
             <NotFoundPage />
           </PrivateRoute>
+          
         </Switch>
       </Router>
     </div>

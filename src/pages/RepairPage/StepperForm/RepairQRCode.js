@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import QRCode from 'qrcode.react';
-import { DOMAIN_URL } from "../../../config/index";
+import { Button, Box } from '@material-ui/core';
+import QR from './QR';
+import { ref } from 'yup';
+
+import ReactToPrint from 'react-to-print';
+import { ComponentToPrint } from './ComponentToPrint';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,29 +25,55 @@ const useStyles = makeStyles(theme => ({
 
 const RepairQRCode = () => {
     const classes = useStyles();
+    const componentRef = useRef();
+    const pageStyle = `
+    @media print {
+        @page { 
+          /* size: landscape;  */
+          size: 50mm 100mm;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          
+          /* text-align: center; */
+          
+        }
+        .page-break {
+          margin-top: 1rem;
+          display: block;
+          page-break-before: auto;
+        }
+      }
+      
+    `;
+
     return (
         <div className={classes.root}>
             <Grid
                 container
-                direction="row"
+                direction="column"
                 justify="center"
                 alignItems="center"
                 spacing={1}
             >
-                <QRCode
-                    size={128}
-                    renderAs={"svg"}
-                    value={DOMAIN_URL}
-                // imageSettings={{
-                //     src: "./kisspng-xiaomi-mi-5-xiaomi-mi-6-xiaomi-redmi-xiaomi-mi-1-mini-5ab53c5e79db15.1083687115218269104991.png",
-                //     x: null,
-                //     y: null,
-                //     height: 30,
-                //     width: 40,
-                //     excavate: true,
-                // }}
-                />
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    //justifyContent="center"
+                    alignItems="center"
+                >
+                    {/* <QR /> */}
+                    <ComponentToPrint
+                        ref={componentRef}
+                    />
+                    <br />
+                    <ReactToPrint
+                        trigger={() => <button>Print this out!</button>}
+                        content={() => componentRef.current}                       
+                    />
+                </Box>
             </Grid>
+
         </div>
     )
 }

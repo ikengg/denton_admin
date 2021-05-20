@@ -26,7 +26,7 @@ const SecondListItems = () => {
                 key="secList"
                 style={{ color: 'white' }}
             >
-                Saved reports
+                ส่งซ่อมสินค้า
             </ListSubheader>
             {/* second list item */}
             {
