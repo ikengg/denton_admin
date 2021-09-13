@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Footer from '../components/Footer';
 import { useDispatch, useSelector } from "react-redux";
 import { signIn, getCurrentUser, signOut } from "../redux/actions/authAction";
-import { useHistory } from 'react-router-dom'
 import useForm from "react-hook-form";
 import * as yup from "yup";
 import {
@@ -24,6 +23,8 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
+
 
 import firebase from '../firebase';
 import 'firebase/auth';
@@ -80,10 +81,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginPage() {
-
+  
+  let navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory()
   const [isLoginFail, setIsLoginFail] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // const [currentUser, setCurrentUser] = useState(null);
@@ -102,7 +103,8 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      dispatch(signIn(data.email, data.password, history));
+      // dispatch(signIn(data.email, data.password, history));
+      dispatch(signIn(data.email, data.password, navigate));
       // history.replace('/');
     } catch (e) {
       setMessage(e.message);

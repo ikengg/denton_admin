@@ -48,23 +48,24 @@ export const getCurrentUser = () => {
     };
 };
 
-export const signIn = (email, password, history) => {
+export const signIn = (email, password, navigate) => {
     return async dispatch => {
         try {
             let user = await auth.signInWithEmailAndPassword(email, password);
             dispatch(setStateRecordToLoginSuscess(user.user));
-            history.replace('/');
+            navigate('/admin/dashboard/');
         } catch (e) {
             dispatch(setStateRecordToLoginFailed(e));
         }
     };
 };
 
-export const signOut = (dispatch) => {
+export const signOut = (navigate) => {
     return async dispatch => {
         try {
             await auth.signOut();
             dispatch(setStateToLogOut());
+            navigate('/');
         } catch (e) {
             console.log(e)
         }

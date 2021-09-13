@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotFoundView = () => {
+const NotFoundPage = () => {
 
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -120,9 +120,9 @@ const NotFoundView = () => {
         >
           {/* Chart */}
           <Grid item xs={12} md={12} lg={12} >
-            <Paper
+            {/* <Paper
               className={fixedHeightPaper}
-            >
+            > */}
               <Typography
                 align="center"
                 color="textPrimary"
@@ -140,7 +140,7 @@ const NotFoundView = () => {
               </Typography>
 
 
-            </Paper>
+            {/* </Paper> */}
           </Grid>
         </Grid>
         <Box pt={4}>
@@ -151,4 +151,4 @@ const NotFoundView = () => {
   );
 };
 
-export default NotFoundView;
+export default NotFoundPage;

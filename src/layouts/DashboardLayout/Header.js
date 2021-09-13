@@ -9,8 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 // import { updateProfile } from '../redux/actions/authAction'
 import { useSelector, useDispatch } from 'react-redux' //ไว้เรียก action
-import { useHistory } from 'react-router-dom'
-import { signOut } from "../redux/actions/authAction";
+import { signOut } from "../../redux/actions/authAction";
+import { useNavigate } from 'react-router-dom';
 
 import clsx from 'clsx';
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = (props) => {
-
+    let navigate = useNavigate();
     const classes = useStyles();
     let { open, handleDrawerOpen } = props;
     const userProfile = useSelector((state) => state.authReducer.profile);
@@ -60,10 +60,9 @@ const Header = (props) => {
 
     //console.log(userProfile);
     const dispatch = useDispatch();
-    const history = useHistory()
 
     const logout = e => {
-        dispatch(signOut());
+        dispatch(signOut(navigate));
     }
 
     return (
@@ -81,7 +80,7 @@ const Header = (props) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        POSPOS <small>Beta v0.1</small>
+                        Denton Admin
                     </Typography>
                     {isLogedin && (
                         <Typography component="p" color="inherit" noWrap>
@@ -92,8 +91,9 @@ const Header = (props) => {
                         <Badge color="secondary">
                             <ExitToAppIcon
                                 onClick={() => {
-                                    logout();
-                                    history.replace('/login');
+                                    logout();                                    
+                                    //TODO: history.replace('/login');
+                                    
                                 }}
                             />
                         </Badge>
