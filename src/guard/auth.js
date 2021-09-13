@@ -1,14 +1,18 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { 
+  Route, 
+  // Navigate,
+  Redirect 
+} from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 export default function PrivateRoute({ children, ...rest }) {
   let isAuth = false;
 
-  const token = JSON.parse(localStorage.getItem("token"));
+  const profile = useSelector(state => state.authReducer.profile)
 
-  if (token) {
+  if (profile) {
     isAuth = true;
-
   }
 
   return (
@@ -24,6 +28,7 @@ export default function PrivateRoute({ children, ...rest }) {
               state: { from: location },
             }}
           />
+          // <Navigate to="/login" /> 
         )
       }
     />

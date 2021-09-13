@@ -1,29 +1,38 @@
 import './App.css';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import DashboardPage from './pages/DashboardPage';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import useStyles from './styles';
 import DrawerMenu from './components/DrawerMenu/DrawerMenu';
 import Header from './components/Header';
-import { BrowserRouter as Router, 
-  Switch, 
-  Route, 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
 } from "react-router-dom";
 import RepairPage from './pages/RepairPage/RepairPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './guard/auth';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateProfile } from './redux/actions/authAction'
+import { signIn, getCurrentUser, signOut } from "./redux/actions/authAction";
+
 import AdminRepair from './pages/AdminRepair/AdminRepair';
 import RepairStatusTracking from './pages/RepairStatusTracking/RepairStatusTracking';
 import RepairQRCode from './pages/RepairPage/StepperForm/RepairQRCode';
+import {
+  CircularProgress,
+  Box,
+  CssBaseline
+} from '@material-ui/core';
 
 
 function App() {
 
   const classes = useStyles();
   const profile = useSelector(state => state.authReducer.profile)
+  const loading = useSelector(state => state.authReducer.loading)
+  const isLogedin = useSelector(state => state.authReducer.isLogedin)
+
   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(true);
@@ -36,10 +45,33 @@ function App() {
 
   // //on reflesh page
   useEffect(() => {
-    let profile = JSON.parse(localStorage.getItem("profile"));
-    dispatch(updateProfile(profile));
-    // eslint-disable-next-line
+    dispatch(getCurrentUser());
   }, [])
+
+  const logout = e => {
+    dispatch(signOut());
+  }
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        marginTop={15}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // if (profile) {
+  //   return (
+  //     <div>
+  //       <p>Login complete {profile.email}</p>
+  //       <button onClick={logout} >Logout</button>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className={classes.root}>
@@ -47,14 +79,14 @@ function App() {
       <Router>
         {/* Header */}
         {
-          profile && <Header
+          isLogedin && <Header
             open={open}
             handleDrawerOpen={handleDrawerOpen}
           />
         }
         {/* Left Drawer */}
         {
-          profile && <DrawerMenu
+          isLogedin && <DrawerMenu
             open={open}
             handleDrawerClose={handleDrawerClose}
           />
@@ -67,7 +99,7 @@ function App() {
           {/* Status tracking public page */}
           <Route exact path="/status">
             <RepairStatusTracking />
-          </Route>          
+          </Route>
           {/* Home */}
           <PrivateRoute exact path="/">
             <DashboardPage />
@@ -85,7 +117,7 @@ function App() {
           <PrivateRoute >
             <NotFoundPage />
           </PrivateRoute>
-          
+
         </Switch>
       </Router>
     </div>

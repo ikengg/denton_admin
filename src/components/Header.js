@@ -7,20 +7,24 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { updateProfile } from '../redux/actions/authAction'
+// import { updateProfile } from '../redux/actions/authAction'
 import { useSelector, useDispatch } from 'react-redux' //ไว้เรียก action
 import { useHistory } from 'react-router-dom'
+import { signOut } from "../redux/actions/authAction";
+
 import clsx from 'clsx';
+
+
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-      }),
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -42,20 +46,26 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     appBarSpacer: theme.mixins.toolbar,
-      title: {
+    title: {
         flexGrow: 1,
     },
 }));
 
 const Header = (props) => {
 
-    const classes = useStyles();    
+    const classes = useStyles();
     let { open, handleDrawerOpen } = props;
     const userProfile = useSelector((state) => state.authReducer.profile);
+    const isLogedin = useSelector(state => state.authReducer.isLogedin)
+
     //console.log(userProfile);
     const dispatch = useDispatch();
     const history = useHistory()
-    
+
+    const logout = e => {
+        dispatch(signOut());
+    }
+
     return (
         <>
             {/* Header */}
@@ -73,18 +83,16 @@ const Header = (props) => {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         POSPOS <small>Beta v0.1</small>
                     </Typography>
-                    {userProfile && (
+                    {isLogedin && (
                         <Typography component="p" color="inherit" noWrap>
-                            สวัสดีคุณ {userProfile}
+                            สวัสดีคุณ {userProfile?.email}
                         </Typography>
                     )}
                     <IconButton color="inherit">
                         <Badge color="secondary">
-                            <ExitToAppIcon 
-                                onClick={()=>{
-                                    dispatch(updateProfile(null));
-                                    localStorage.removeItem('token');
-                                    localStorage.removeItem('profile');
+                            <ExitToAppIcon
+                                onClick={() => {
+                                    logout();
                                     history.replace('/login');
                                 }}
                             />

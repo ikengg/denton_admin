@@ -11,7 +11,8 @@ import { ComponentToPrint } from './ComponentToPrint';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: '-1rem 0 2rem 0',
+        // margin: '-1rem 0 2rem 0',
+        margin: '0',
         padding: '0 7rem',
         [theme.breakpoints.down('xs')]: {
             padding: '0'

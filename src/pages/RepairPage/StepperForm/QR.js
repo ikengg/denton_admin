@@ -19,7 +19,7 @@ const QR = () => {
                         // width={50}
                         // height={80}
                         paddingX={1}
-                        paddingY={1}
+                        paddingY={0.5}
                     >   
                         <br />
                         <img src="./Xiaomi_logo.png" height={80} width={80} alt="xiami logo"/>

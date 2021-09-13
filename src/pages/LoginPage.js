@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useEffect
+} from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from '../components/Footer';
-import { PosposAxios } from '../utils/axiosConfig';
-import { updateProfile } from '../redux/actions/authAction'
-import { useDispatch } from 'react-redux' //ไว้เรียก action
+import { useDispatch, useSelector } from "react-redux";
+import { signIn, getCurrentUser, signOut } from "../redux/actions/authAction";
 import { useHistory } from 'react-router-dom'
 import useForm from "react-hook-form";
 import * as yup from "yup";
-import { 
-  CircularProgress, 
+import {
+  CircularProgress,
   Avatar,
   Button,
   CssBaseline,
@@ -21,9 +23,15 @@ import {
   Box,
   Grid,
   Typography,
- } from '@material-ui/core';
+} from '@material-ui/core';
 
+import firebase from '../firebase';
+import 'firebase/auth';
 
+let auth = firebase.auth();
+
+//test@gmail.com
+//123456
 const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -78,48 +86,32 @@ export default function LoginPage() {
   const history = useHistory()
   const [isLoginFail, setIsLoginFail] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // const [currentUser, setCurrentUser] = useState(null);
+  const [message, setMessage] = useState('');
+
+  const profile = useSelector((state) => state.authReducer.profile);
 
   const { register, errors, handleSubmit } = useForm({
     validationSchema: loginSchema
   });
 
+  useEffect(() => {
+    // dispatch(getCurrentUser());
+  }, []);
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      //get JWT token
-      const response = await PosposAxios.post('/api/user/', {
-        email: data.email,
-        password: data.password
-      });
-      if (response.status === 200) {
-        ///เก็บ JWT ไว้ใน local storage
-        localStorage.setItem('token', JSON.stringify(response.data));
-        ///update profile 
-        const profileValue = await PosposAxios.get('/api/user/me', {
-          headers: {
-            Authorization: 'Bearer ' + response.data.access_token
-          }
-        });
-        ///update profile on redux
-        dispatch(updateProfile(profileValue.data.data.firstName));
-        ///save profile to local storage
-        localStorage.setItem('profile', JSON.stringify(profileValue.data.data.firstName));       
-
-        ///back to home
-        history.replace('/');
-      }else{
-        setIsLoginFail(true);
-      }
-
+      dispatch(signIn(data.email, data.password, history));
+      // history.replace('/');
     } catch (e) {
-      setIsLoginFail(true);
-      //console.log(e.response.data.message)
-      console.log(e);
-    }finally{
-      setTimeout(()=>{
+      setMessage(e.message);
+    }finally {
+      setTimeout(() => {
         setIsLoading(false);
-      }, 900);      
+      }, 900);
     }
+
   }
 
   return (
@@ -171,26 +163,26 @@ export default function LoginPage() {
             />
             {
               isLoading
-              ?(
-                <Box
-                  display="flex"
-                  justifyContent="center" 
-                  marginBottom={3}               
-                >
-                  <CircularProgress /> 
-                </Box>               
-              )
-              :(
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Sign In
-                </Button>
-              )
+                ? (
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    marginBottom={3}
+                  >
+                    <CircularProgress />
+                  </Box>
+                )
+                : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    Sign In
+                  </Button>
+                )
             }
             <Grid container>
               <Grid item xs>
