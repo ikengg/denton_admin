@@ -9,7 +9,7 @@ const Footer = () => {
                 {'Copyright © '}
                 {new Date().getFullYear()}{', '}
                 <Link color="inherit" href="https://nexthop.co.th">
-                    Next-Hop Co., Ltd.
+                    Denton Admin@ P&W Development Co.,Ltd
                 </Link>{' '}
             </Typography>
         </div>

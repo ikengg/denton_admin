@@ -3,7 +3,10 @@ import { Navigate } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
-import NotFoundPage from "./pages/NotFoundPage"
+import NotFoundPage from "./pages/NotFoundPage";
+// import RepairPage from "./pages/RepairPage/RepairPage";
+import CategoryPage from "./pages/mySpecialCare/CategoryPage";
+import ArticlePage from "./pages/mySpecialCare/ArticlePage";
 
 const routes = (isLogedin) => [
     {
@@ -11,7 +14,10 @@ const routes = (isLogedin) => [
       element: isLogedin ? <DashboardLayout /> : <Navigate to="/login" />,
       element: <DashboardLayout /> ,
       children: [      
-        { path: "dashboard", element: <DashboardPage /> },       
+        { path: "dashboard", element: <DashboardPage /> }, 
+        // { path: "/", element: <Navigate to="/admin/dashboard" /> },  
+        { path: "article", element: <ArticlePage /> },   
+        { path: "category", element: <CategoryPage /> },   
         { path: "*", element: <Navigate to="/admin" /> },
       ],
     },

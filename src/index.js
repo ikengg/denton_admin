@@ -9,6 +9,7 @@ import thunk from "redux-thunk";
 import reducers from './redux/reducers/index';
 import { createStore, applyMiddleware } from "redux";
 import { BrowserRouter as Router } from "react-router-dom";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 const store = createStore(reducers, applyMiddleware(thunk));

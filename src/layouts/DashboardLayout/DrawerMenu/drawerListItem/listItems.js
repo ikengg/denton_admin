@@ -6,9 +6,12 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 //import AssignmentIcon from '@material-ui/icons/Assignment';
-import BuildIcon from '@material-ui/icons/Build';
-import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+// import BuildIcon from '@material-ui/icons/Build';
+// import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+
 
 export const mainListItems = [
   {
@@ -63,17 +66,17 @@ export const mainListItems = [
 ];
 
 
-export const secondaryListItems = [
+export const mySpecialCareListItem = [
   {
-    icon: <BuildIcon style={{ color: 'white' }} />,
-    text: 'ลงทะเบียนสินค้าซ่อม',
-    route: '/repair',
+    icon: <FormatAlignRightIcon style={{ color: 'white' }} />,
+    text: 'Article',
+    route: '/admin/article',
     isDisable: false
   },
   {
-    icon: <FormatAlignLeftIcon style={{ color: 'white' }} />,
-    text: 'อัพเดทสถานะ',
-    route: '/adminrepair',
+    icon: <LocalOfferIcon style={{ color: 'white' }} />,
+    text: 'Category',
+    route: '/admin/category',
     isDisable: false
   },
   {

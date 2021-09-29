@@ -1,13 +1,18 @@
-import React from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Footer from '../../components/Footer';
+import {
+  Box,
+  Button,
+  Typography,
+  Grid,
+  Container,
+  Paper
+} from '@material-ui/core';
+import Footer from '../../../components/Footer';
 import { makeStyles } from '@material-ui/core/styles';
-//import FormStepper from './FormStepper';
-import Register from './StepperForm/index';
+
+import CategoryForm from './component/CategoryForm';
+import CategoryTable from './component/CategoryTable';
 
 const drawerWidth = 240;
 
@@ -87,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    
+
   },
   paper: {
     padding: theme.spacing(2),
@@ -101,31 +106,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RepairPage() {
-  
-  const classes = useStyles();
+export default function Category() {
 
+  const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  
+  const [isFormShow, setIsFormShow] = useState(false);
 
   return (
     <>
       {/* Home Content */}
       <main className={classes.content} justify="center">
         <div className={classes.appBarSpacer} />
-        <Container 
-          maxWidth="lg"           
-          className={classes.container}          
+        <Container
+          maxWidth="lg"
+          className={classes.container}
         >
-          <Grid 
-            container 
-            spacing={3}             
+          <Grid
+            container
+            spacing={3}
           >
             {/* Chart */}
             <Grid item xs={12} md={12} lg={12} >
-              <Paper 
-                className={fixedHeightPaper} 
-              > 
-                <Register />
+              <Paper
+                className={fixedHeightPaper}
+              >
+                <Box
+                  display="flex"
+                  mb={6}
+                >
+                  <Box flexGrow={1} item >
+                    <h3>
+                      Category
+                    </h3>
+                  </Box>
+                  <Box item >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(e) => {
+                        setIsFormShow(!isFormShow);
+                      }}
+                    >
+                      {!isFormShow? "เพิ่มหมวดหมู่" : "กลับ"}
+                    </Button>
+                  </Box>
+                </Box>
+
+                {isFormShow
+                  ? <CategoryForm setIsFormShow={setIsFormShow} />
+                  : <CategoryTable />}
+                {/* <CategoryForm />
+                <CategoryTable /> */}
               </Paper>
             </Grid>
           </Grid>

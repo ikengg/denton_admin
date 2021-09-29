@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { secondaryListItems } from './listItems';
+import { mySpecialCareListItem } from './listItems';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { NavLink } from "react-router-dom";
 
@@ -26,11 +26,11 @@ const SecondListItems = () => {
                 key="secList"
                 style={{ color: 'white' }}
             >
-                ส่งซ่อมสินค้า
+                My Special Care
             </ListSubheader>
             {/* second list item */}
             {
-                secondaryListItems.map((list, index) => {
+                mySpecialCareListItem.map((list, index) => {
                     return (
                             <ListItem
                                 button

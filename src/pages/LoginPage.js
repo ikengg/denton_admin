@@ -2,12 +2,12 @@ import React, {
   useState,
   useEffect
 } from 'react';
+import firebase from '../firebase';
+import 'firebase/auth';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from '../components/Footer';
-import { useDispatch, useSelector } from "react-redux";
-import { signIn, getCurrentUser, signOut } from "../redux/actions/authAction";
-import useForm from "react-hook-form";
+import {useForm} from "react-hook-form";
 import * as yup from "yup";
 import {
   CircularProgress,
@@ -24,10 +24,9 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
-
-
-import firebase from '../firebase';
-import 'firebase/auth';
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import { signIn, getCurrentUser, signOut } from "../redux/actions/authAction";
 
 let auth = firebase.auth();
 

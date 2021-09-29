@@ -27,11 +27,8 @@ const authReducer = (state = initState, action) => {
                 isLogedin: (getUser? true: false),
                 error: null,
             };
-        case LOGIN_SUSCESS:
-            
+        case LOGIN_SUSCESS:       
             let userLogin = action.payload.user;
-            console.log("LOGIN SUSCESS")
-            console.log(userLogin)
             return {
                 ...state,
                 profile: userLogin,

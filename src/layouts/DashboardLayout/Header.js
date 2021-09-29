@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar: {
         paddingRight: 24, // keep right padding when drawer closed    
-        backgroundColor: '#FFB81C',
+        backgroundColor: '#B898FF',
         color: 'black'
     },
     menuButton: {
