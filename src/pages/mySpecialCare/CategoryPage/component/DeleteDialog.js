@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { deleteCategory } from "../../../../redux/actions/categoryAction";
 
 const DeleteDialog = (props) => {
-    const {handleCloseDeleteDialog, handleClickOpenDeleteDialog, openDeleteDialog, dialogData } = props;
+    const { handleCloseDeleteDialog, handleClickOpenDeleteDialog, openDeleteDialog, dialogData } = props;
     const dispatch = useDispatch();
     return (
         <div>
@@ -25,10 +25,10 @@ const DeleteDialog = (props) => {
                     <Button onClick={handleCloseDeleteDialog} color="primary">
                         Cancel
                     </Button>
-                    <Button 
+                    <Button
                         onClick={() => {
-                            dispatch(deleteCategory(dialogData.id, handleCloseDeleteDialog));
-                        }} 
+                            dispatch(deleteCategory(dialogData.id, dialogData.categorImageName, handleCloseDeleteDialog));
+                        }}
                         color="secondary"
                     >
                         Delete

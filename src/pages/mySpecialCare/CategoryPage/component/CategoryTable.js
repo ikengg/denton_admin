@@ -7,7 +7,9 @@ import EditDialog from './EditDialog';
 import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../../../redux/actions/categoryAction";
 
-const CategoryTable = () => {
+const CategoryTable = (props) => {
+
+    const { showFormEdit, setEditingFormData } = props;
 
     //redux instance
     const {
@@ -22,6 +24,15 @@ const CategoryTable = () => {
     const [dialogData, setDialogData] = useState({});
     const [datatable, setDatatable] = useState({
         columns: [
+            {
+                label: 'Image',
+                field: 'categoryImage',
+                width: 800,
+                attributes: {
+                    'aria-controls': 'DataTable',
+                    'aria-label': 'Name',
+                },
+            },
             {
                 label: 'Name',
                 field: 'name',
@@ -62,15 +73,17 @@ const CategoryTable = () => {
         setOpenDeleteDialog(false);
     };
 
-    let handleDeleteButton = async (id, name) => {
-        setDialogData({ id, name });
+    let handleDeleteButton = async (id, name, categorImageName) => {
+        setDialogData({ id, name, categorImageName });
         handleClickOpenDeleteDialog();
-    }
+    };
 
-    let handleEditButton = (id, name) => {
-        setDialogData({ id, name });
-        handleClickOpenEditDialog();
-    }
+    let handleEditButton = (id, name, categoryImage, categorImageName) => {
+        // setDialogData({ id, name });
+        // handleClickOpenEditDialog();
+        setEditingFormData({ id, name, categoryImage, categorImageName })
+        showFormEdit();
+    };
 
     //useEffect
     useEffect(() => {
@@ -86,6 +99,7 @@ const CategoryTable = () => {
 
     useEffect(() => {
         if (category) {
+            console.log("cate change")
             setDatatable({ ...datatable, rows: category });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

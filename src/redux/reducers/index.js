@@ -1,13 +1,20 @@
 import { combineReducers } from "redux";
 
-import formStepperReducer from './formStepperReducer';
 import authReducer from './authReducer'
 import categoryReducer from './categoryReducer';
+import articleReducer from './articleReducer';
+import videoReducer from './videoReducer';
+import clinicReducer from './clinicReducer';
+import newsReducer from './newsReducer';
+
 
 const rootReducer = combineReducers({
-    formStepperReducer,
     authReducer,
     categoryReducer,
+    articleReducer,
+    videoReducer,
+    clinicReducer,
+    newsReducer
 });
   
 export default rootReducer;

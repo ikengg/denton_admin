@@ -1,4 +1,4 @@
-import { TrendingUpRounded } from '@material-ui/icons';
+// import { TrendingUpRounded } from '@material-ui/icons';
 import {
     LOGIN_SUSCESS,
     LOGIN_FAILED,
@@ -11,6 +11,7 @@ const initState = {
     loading: true,
     error: null,
     isLogedin: false,
+    isLoginFail: false,
 }
 
 const authReducer = (state = initState, action) => {
@@ -35,6 +36,7 @@ const authReducer = (state = initState, action) => {
                 loading: false,
                 isLogedin: true,
                 error: null,
+                isLoginFail: false
             };
         case LOGIN_FAILED:
             let loginError = action.payload.err.message;
@@ -42,6 +44,7 @@ const authReducer = (state = initState, action) => {
                 ...state,
                 loading: false,
                 error: loginError,
+                isLoginFail: true
             };
         case LOGOUT:
             console.log("Logout Success");
@@ -50,6 +53,7 @@ const authReducer = (state = initState, action) => {
                 profile: null,
                 loading: false,
                 isLogedin: false,
+                isLoginFail: false
             };
         default:
             return state

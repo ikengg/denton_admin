@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { 
+  useState, 
+  // useEffect 
+} from 'react';
 import clsx from 'clsx';
 import {
   Box,
   Button,
-  Typography,
+  // Typography,
   Grid,
   Container,
   Paper
@@ -11,8 +14,10 @@ import {
 import Footer from '../../../components/Footer';
 import { makeStyles } from '@material-ui/core/styles';
 
-import CategoryForm from './component/CategoryForm';
+import CategoryForm from './component/CategoryForm/';
 import CategoryTable from './component/CategoryTable';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+
 
 const drawerWidth = 240;
 
@@ -112,6 +117,15 @@ export default function Category() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   
   const [isFormShow, setIsFormShow] = useState(false);
+  const [editFormData, setEditFormData] = useState(undefined);
+
+  const showFormEdit = () => {
+    setIsFormShow(true);
+  };
+
+  const setEditingFormData = (data) => {
+    setEditFormData(data)
+  };
 
   return (
     <>
@@ -119,7 +133,8 @@ export default function Category() {
       <main className={classes.content} justify="center">
         <div className={classes.appBarSpacer} />
         <Container
-          maxWidth="lg"
+          // maxWidth="lg"
+          maxWidth="xl"
           className={classes.container}
         >
           <Grid
@@ -135,12 +150,13 @@ export default function Category() {
                   display="flex"
                   mb={6}
                 >
-                  <Box flexGrow={1} item >
+                  <Box flexGrow={1} item="true" >
                     <h3>
-                      Category
+                      <LocalOfferIcon style={{ color: 'dark' }} fontSize="large" /> Category 
                     </h3>
+                    
                   </Box>
-                  <Box item >
+                  <Box item="true" >
                     <Button
                       variant="contained"
                       color="primary"
@@ -152,12 +168,10 @@ export default function Category() {
                     </Button>
                   </Box>
                 </Box>
-
                 {isFormShow
-                  ? <CategoryForm setIsFormShow={setIsFormShow} />
-                  : <CategoryTable />}
-                {/* <CategoryForm />
-                <CategoryTable /> */}
+                  ? <CategoryForm setIsFormShow={setIsFormShow} editFormData={editFormData} setEditingFormData={setEditingFormData} />
+                  : <CategoryTable showFormEdit={showFormEdit} setEditingFormData={setEditingFormData}/>
+                }
               </Paper>
             </Grid>
           </Grid>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 //mui
 import {
-    Grid,
+    // Grid,
     Button,
     TextField,
-    CircularProgress,
-    Container,
+    // CircularProgress,
+    // Container,
     Box,
     Typography,
     Dialog,
@@ -35,6 +35,7 @@ const EditDialog = (props) => {
         return () => {
             dispatch(setStateAddCategoryComplete());
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dialogData.name])
 
     //render

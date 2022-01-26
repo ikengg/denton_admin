@@ -1,15 +1,15 @@
 //import lib
 import { useEffect } from 'react';
 import {
-    Grid,
+    // Grid,
     Button,
     TextField,
     CircularProgress,
-    Container,
+    // Container,
     Box,
     Typography
 } from '@material-ui/core';
-
+import ImageUpload from './ImageUpload';
 //form
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -18,9 +18,9 @@ import {
     useForm,
     Controller
 } from "react-hook-form";
+//redux
 import { useDispatch, useSelector } from "react-redux";
-import { addCategory, setStateAddCategoryComplete } from "../../../../redux/actions/categoryAction";
-
+import { addCategory, setStateAddCategoryComplete, editCategory } from "../../../../../redux/actions/categoryAction";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,48 +44,90 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const schema = yup.object().shape({
-    name: yup.string().required('กรุณากรอก Category'),
-});
 
 const CategoryForm = (props) => {
 
+    let { editFormData, setEditingFormData } = props;
+    let name, id , categorImageName = '';
+    let categoryImage = undefined;
+    if (editFormData) {
+        name = editFormData.name;
+        id = editFormData.id;
+        categoryImage = editFormData.categoryImage;
+        categorImageName = editFormData.categorImageName;
+        console.log(categoryImage);
+    }
+
+    const schema = yup.object().shape({
+        name: yup.string().required('กรุณากรอก Category'),
+        image: (id === '') ? yup.mixed().required('กรุณาเลือกรูปภาพ') : yup.mixed(),
+    });
+
     const classes = useStyles();
-    const { handleSubmit, control } = useForm({
+    const {
+        handleSubmit,
+        control,
+        watch,
+        setValue,
+    } = useForm({
         resolver: yupResolver(schema)
     });
+
+    const imageContent = watch("image");
 
     const {
         isAddLoading,
         isAddError,
-        addError
+        addError,
     } = useSelector((state) => state.categoryReducer);
     const dispatch = useDispatch();
 
-
-    const onSubmit = async (data) => {
-        dispatch(addCategory(data.name, props.setIsFormShow));
+    const setImageValue = (acceptedFiles) => {
+        console.log(acceptedFiles[0]);
+        setValue("image", acceptedFiles[0]);
     };
 
-    useEffect(() => {   
+    const clearImageValue = () => {
+        console.log('clear');
+        setValue("image", null);
+    };
+
+
+    const onSubmit = async (data) => {
+        console.log(id);
+        if (!id) {
+            dispatch(addCategory(data, props.setIsFormShow));
+        } else {
+            // dispatch(editCategory(id, name, props.setIsFormShow));  
+            dispatch(editCategory(id, data, categorImageName, props.setIsFormShow));
+        }
+
+    };
+
+    useEffect(() => {
 
     }, [isAddError]);
 
     useEffect(() => {
         return () => {
             dispatch(setStateAddCategoryComplete());
+            setEditingFormData(undefined);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
+                {id && <Box pt={4} px={5}>แก้ไข</Box>}
                 <Box pt={4} px={5}>
+                    {/* cat name */}
                     <Controller
                         name="name"
                         id="name"
                         control={control}
-                        defaultValue=''                        
+                        defaultValue={name}
                         rules={{ required: true }}
                         render={({ field, formState }) =>
                             <>
@@ -94,6 +136,7 @@ const CategoryForm = (props) => {
                                     {...field}
                                     label="Category name"
                                     variant="outlined"
+                                    // value={name}
                                     fullWidth
                                     error={!!formState.errors?.name}
                                     // required
@@ -110,7 +153,47 @@ const CategoryForm = (props) => {
                             </>
                         }
                     />
+                </Box >
+                {/* if edit show image too */}
+                <Box pt={4} px={5} display="flex" justifyContent="center">
+                    {categoryImage && (
+                        <img
+                            src={categoryImage}
+                            height={50}
+                            width={50}
+                            alt={name}
+                        />
+                    )}
                 </Box>
+                {/* image upload */}
+                <Box pt={4} px={5}>
+                    <Typography variant="body2">
+                        {id && 'แก้ไข'}รูปหมวดหมู่
+                    </Typography>
+                    <Controller
+                        control={control}
+                        defaultValue=''
+                        value={imageContent}
+                        render={({ field, formState }) => (
+                            <>
+                                <ImageUpload
+                                    {...field}
+                                    setImageValue={setImageValue}
+                                    clearImageValue={clearImageValue}
+                                    error={!!formState.errors?.image}
+                                />
+                                {/* error occur */}
+                                <Typography variant="body1" color="error">
+                                    {
+                                        !!formState.errors?.image &&
+                                        formState.errors?.image.message
+                                    }
+                                </Typography>
+                            </>
+                        )}
+                    />
+                </Box>
+
                 {
                     isAddError && (
                         <Box pt={4} px={5}>
@@ -133,7 +216,7 @@ const CategoryForm = (props) => {
                                 type="submit"
                             >
                                 <Typography variant="body1">
-                                    เพิ่ม
+                                    {id ? 'แก้ไข' : 'เพิ่ม'}
                                 </Typography>
                             </Button>
                         )

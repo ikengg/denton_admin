@@ -3,8 +3,10 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import MainListItems from './drawerListItem/MainListItems';
-import SecondListItems from './drawerListItem/SecondListItem';
+// import MainListItems from './drawerListItem/MainListItems';
+import DashBoardListItem from './drawerListItem/DashBoardListItem';
+import MySpecialcareMenuListItems from './drawerListItem/MySpecialcareMenuListItems';
+import MyDentistMenuListItem from './drawerListItem/MyDentistMenuListItem'
 import Divider from '@material-ui/core/Divider';
 //import useStyles from '../styles';
 import clsx from 'clsx';
@@ -84,18 +86,19 @@ const DrawerMenu = (props) => {
                         <ChevronLeftIcon style={{ color: 'white' }} />
                     </IconButton>
                 </div>
-                <Divider />
-                {/* Main List */}
+
                 <List>
-                    {/* {mainListItems} */}
-                    {/* {list} */}
-                    <MainListItems />
+                  <DashBoardListItem />
+                </List>
+                <Divider />                
+                <List>
+                    <MySpecialcareMenuListItems />
                 </List>
                 <Divider />
-                {/* Second List */}
                 <List>
-                    <SecondListItems />
+                  <MyDentistMenuListItem />
                 </List>
+                
             </Drawer>
         </>
     )

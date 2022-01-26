@@ -1,16 +1,23 @@
-import React from 'react';
-import { useState } from 'react';
+import {
+  useState,
+  // useEffect 
+} from 'react';
 import clsx from 'clsx';
 import {
   Box,
   Button,
-  Typography,
+  // Typography,
   Grid,
   Container,
   Paper
 } from '@material-ui/core';
-import Footer from '../../../components/Footer';
 import { makeStyles } from '@material-ui/core/styles';
+import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+
+//component
+import AddArticle from './component/AddArticle/';
+import ArticleList from './component/ArticleList/';
+import Footer from '../../../components/Footer';
 
 const drawerWidth = 240;
 
@@ -106,16 +113,29 @@ const useStyles = makeStyles((theme) => ({
 
 const ArticlePage = () => {
 
-    const classes = useStyles();
+  //style
+  const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    return (
-        <>
-      {/* Home Content */}
+  //state
+  const [isFormShow, setIsFormShow] = useState(false);
+  const [editFormData, setEditFormData] = useState(undefined);
+
+  const showFormEdit = () => {
+    setIsFormShow(true);
+  };
+
+  const setEditingFormData = (data) => {
+    setEditFormData(data);
+  };
+
+  return (
+    <>
       <main className={classes.content} justify="center">
         <div className={classes.appBarSpacer} />
         <Container
-          maxWidth="lg"
+          //maxWidth="lg"
+          maxWidth="xl"
           className={classes.container}
         >
           <Grid
@@ -125,8 +145,32 @@ const ArticlePage = () => {
             <Grid item xs={12} md={12} lg={12} >
               <Paper
                 className={fixedHeightPaper}
-              >                
-                <h3>Article</h3> 
+              >
+                <Box
+                  display="flex"
+                  mb={6}
+                >
+                  <Box flexGrow={1} item="true" >
+                    <h3>
+                      <FormatAlignRightIcon style={{ color: 'dark' }} fontSize="large" /> Article
+                    </h3>
+                  </Box>
+                  <Box item="true" >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(e) => {
+                        setIsFormShow(!isFormShow);
+                      }}
+                    >
+                      {!isFormShow ? "เพิ่มบทความ" : "กลับ"}
+                    </Button>
+                  </Box>
+                </Box>
+                {isFormShow
+                  ? <AddArticle setIsFormShow={setIsFormShow} editFormData={editFormData} setEditingFormData={setEditingFormData} />
+                  : <ArticleList setEditingFormData={setEditingFormData} showFormEdit={showFormEdit} />
+                }
               </Paper>
             </Grid>
           </Grid>
@@ -136,7 +180,7 @@ const ArticlePage = () => {
         </Container>
       </main>
     </>
-    )
-}
+  )
+};
 
 export default ArticlePage;

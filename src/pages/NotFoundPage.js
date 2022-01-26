@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Box,
   Grid,
-  Paper,
+  //Paper,
   Container,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import Footer from '../components/Footer';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 
 const drawerWidth = 240;
 
@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 const NotFoundPage = () => {
 
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <main className={classes.content} justify="center">

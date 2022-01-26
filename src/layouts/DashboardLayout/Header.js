@@ -7,14 +7,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-// import { updateProfile } from '../redux/actions/authAction'
-import { useSelector, useDispatch } from 'react-redux' //ไว้เรียก action
+// import { updateProfile } from '../redux/actions/authAction';
+import { 
+    useSelector,
+    useDispatch
+} from 'react-redux'; //ไว้เรียก action
 import { signOut } from "../../redux/actions/authAction";
 import { useNavigate } from 'react-router-dom';
-
 import clsx from 'clsx';
-
-
 
 const drawerWidth = 240;
 
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = (props) => {
+    
     let navigate = useNavigate();
     const classes = useStyles();
     let { open, handleDrawerOpen } = props;
@@ -80,7 +81,7 @@ const Header = (props) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Denton Admin
+                        Denston admin
                     </Typography>
                     {isLogedin && (
                         <Typography component="p" color="inherit" noWrap>
@@ -92,8 +93,7 @@ const Header = (props) => {
                             <ExitToAppIcon
                                 onClick={() => {
                                     logout();                                    
-                                    //TODO: history.replace('/login');
-                                    
+                                    //TODO: history.replace('/login');                                    
                                 }}
                             />
                         </Badge>
@@ -102,6 +102,6 @@ const Header = (props) => {
             </AppBar>
         </>
     )
-}
+};
 
-export default Header
+export default Header;

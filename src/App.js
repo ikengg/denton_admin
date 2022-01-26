@@ -8,26 +8,29 @@ import {
   Box,
   CssBaseline
 } from '@material-ui/core';
+
 import { useRoutes } from 'react-router-dom';
 import routes from './routes';
 
 
 function App() {
 
-  
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  //check if client login or not
   const {
     loading, 
     isLogedin
-  } = useSelector(state => state.authReducer)
+  } = useSelector(state => state.authReducer);
+  
   const routing = useRoutes(routes(isLogedin));
-  const dispatch = useDispatch();
 
-  // //on reflesh page
+  // on reflesh page
   useEffect(() => {
     dispatch(getCurrentUser());
-  }, [])
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     return (
@@ -47,6 +50,6 @@ function App() {
       { routing }
     </div>
   );
-}
+};
 
 export default App;

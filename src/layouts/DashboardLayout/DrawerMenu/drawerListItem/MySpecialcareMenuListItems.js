@@ -1,10 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    ListSubheader
+} from '@material-ui/core';
 import { mySpecialCareListItem } from './listItems';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SecondListItems = () => {
+const MySpecialcareMenuListItems = () => {
 
     const classes = useStyles();
 
@@ -23,12 +25,12 @@ const SecondListItems = () => {
         <>
             <ListSubheader
                 inset
-                key="secList"
+                key="mySpecialCareListItem"
                 style={{ color: 'white' }}
             >
                 My Special Care
             </ListSubheader>
-            {/* second list item */}
+            {/* mySpecialCareListItem */}
             {
                 mySpecialCareListItem.map((list, index) => {
                     return (
@@ -36,9 +38,10 @@ const SecondListItems = () => {
                                 button
                                 key={list.route}
                                 className={classes.listInDrawer}
-                                activeClassName={classes.isActive}
+                                activeclassname={classes.isActive}
                                 component={NavLink}
-                                to={`${list.route}`}                                
+                                to={`${list.route}`}      
+                                exact="true"                         
                                 disabled={list.isDisable}
                             >
                                 <ListItemIcon >
@@ -53,4 +56,4 @@ const SecondListItems = () => {
     )
 };
 
-export default SecondListItems;
+export default MySpecialcareMenuListItems;
